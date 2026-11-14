@@ -23,6 +23,7 @@ magic-portal installed [--json]
 magic-portal templates --version <version> [--json]
 magic-portal create --engine <version> --template <name> --name <project> --path <path> [--yes] [--json]
 magic-portal run [--path <path>] [--json] [-- <engine args>]
+magic-portal bump [--root <path>] [--json]
 magic-portal doctor [--json]
 magic-portal --version
 magic-portal --help
@@ -175,6 +176,26 @@ In `--json` mode, engine stdout and stderr are forwarded to stderr so stdout con
 
 Exit code is `0` when the engine exits successfully, and `1` when the engine exits with a non-zero code or cannot start. The engine exit code is included in the error message.
 
+### `bump`
+
+Update the portal release list from `portal.toml`.
+
+Options:
+
+- `--root <path>` - repository root containing `portal.toml` and `versions.toml` (default `.`).
+- `--json` - machine-readable output.
+
+Behavior:
+
+1. Read `portal.toml` (`version` and `channel`).
+2. Read `versions.toml` (list of portal releases).
+3. Compare `portal.toml` version with the newest version in `versions.toml`.
+4. If newer, prepend a new release entry to `versions.toml`.
+5. If equal, do nothing and report that it is already the latest release.
+6. If older, fail with an error instead of downgrading the release list.
+
+`versions.toml` is written atomically.
+
 ### `doctor`
 
 Check the portal environment:
@@ -225,6 +246,21 @@ Run:
 }
 ```
 
+Bump:
+
+```json
+{
+  "ok": true,
+  "command": "bump",
+  "data": {
+    "version": "0.2.0",
+    "previous_latest": "0.1.0",
+    "added": true,
+    "path": "/home/user/RustProjects/magic-portal/versions.toml"
+  }
+}
+```
+
 Error:
 
 ```json
@@ -268,6 +304,7 @@ magic-portal installed --json
 magic-portal templates --version 0.1.0 --json
 magic-portal create --engine 0.1.0 --template 3d --name my-game --path ~/projects/my-game --yes --json
 magic-portal run --path ~/projects/my-game --json
+magic-portal bump --json
 magic-portal uninstall 0.1.0 --yes --json
 ```
 
@@ -298,6 +335,7 @@ Add:
 ```text
 src/cli.rs
 src/core/doctor.rs
+src/core/portal_version.rs
 src/core/progress.rs
 src/core/run.rs
 ```
@@ -318,5 +356,6 @@ Do not duplicate install, uninstall, template, or project logic in `cli.rs`. Cal
 - Every CLI command must work headless.
 - Never prompt when `--json` is set. If a destructive action lacks `--yes`, fail with a usage error.
 - `run` starts the engine with the project directory as cwd; do not copy the engine into the project.
+- `bump` only updates `versions.toml`; it does not modify `Cargo.toml`.
 - Keep output stable for the agent.
 - Update this file when a command or JSON field changes.

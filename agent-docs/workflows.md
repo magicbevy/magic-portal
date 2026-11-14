@@ -262,7 +262,7 @@ Every error must include:
 
 Do not show raw panic messages. Do not continue after a failed checksum or failed spell unless the user explicitly chooses to continue.
 
-JSON errors use a stable kind: `network`, `io`, `manifest`, `invalid_input`, `usage`, `checksum`, `not_found`, `unsupported`, `install`, or `cancelled`.
+JSON errors use a stable kind: `network`, `io`, `manifest`, `invalid_input`, `usage`, `checksum`, `not_found`, `unsupported`, `install`, `runtime`, or `cancelled`.
 
 If uninstall fails, keep the registry entry and show the path that could not be removed.
 
@@ -281,5 +281,32 @@ Log:
 - Project creation source and destination.
 - Run start, project path, engine path, and exit status.
 - Uninstall request, version, path, and result.
+
+## 8. Portal Version Bump
+
+### Steps
+
+1. Read `portal.toml` (`version`, `channel`).
+2. Read `versions.toml` (list of portal releases).
+3. Find the newest version in `versions.toml` using semantic versioning.
+4. Compare it with the `portal.toml` version.
+5. If `portal.toml` is newer, prepend a new release entry to `versions.toml`.
+6. If equal, do nothing and report the current version.
+7. If older, fail with an error and do not modify `versions.toml`.
+8. Write `versions.toml` atomically.
+
+CLI equivalent:
+
+```bash
+magic-portal bump --json
+magic-portal bump --root ~/RustProjects/magic-portal --json
+```
+
+### Rules
+
+- `portal.toml` only needs `version` and `channel`.
+- `versions.toml` only needs `version` and `channel`.
+- `bump` does not modify `Cargo.toml` or `portal.toml`.
+- `bump` does not contact GitHub; it is a local release-list operation.
 
 Do not log secrets or tokens.

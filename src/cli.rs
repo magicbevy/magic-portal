@@ -9,6 +9,7 @@ use crate::core::error::{PortalError, PortalResult};
 use crate::core::github;
 use crate::core::installer::{self, InstallOptions, UninstallOptions};
 use crate::core::paths::{InstalledRegistry, MagicPaths, expand_path};
+use crate::core::portal_version;
 use crate::core::progress::{CancelFlag, ProgressEvent, Reporter};
 use crate::core::project;
 use crate::core::run;
@@ -118,6 +119,15 @@ pub enum Command {
         #[arg(long)]
         json: bool,
     },
+    /// Add the portal.toml version to versions.toml when it is newer.
+    Bump {
+        /// Repository root containing portal.toml and versions.toml.
+        #[arg(long, default_value = ".")]
+        root: String,
+        /// Print a machine-readable JSON envelope.
+        #[arg(long)]
+        json: bool,
+    },
 }
 
 impl Command {
@@ -131,6 +141,7 @@ impl Command {
             Self::Create { .. } => "create",
             Self::Run { .. } => "run",
             Self::Doctor { .. } => "doctor",
+            Self::Bump { .. } => "bump",
         }
     }
 
@@ -143,7 +154,8 @@ impl Command {
             | Self::Templates { json, .. }
             | Self::Create { json, .. }
             | Self::Run { json, .. }
-            | Self::Doctor { json } => *json,
+            | Self::Doctor { json }
+            | Self::Bump { json, .. } => *json,
         }
     }
 }
@@ -228,6 +240,7 @@ fn execute(command: &Command) -> PortalResult<CommandOutput> {
         } => execute_create(engine, template, name, path, *yes, *json),
         Command::Run { path, json, args } => execute_run(path, *json, args),
         Command::Doctor { .. } => execute_doctor(),
+        Command::Bump { root, .. } => execute_bump(root),
     }
 }
 
@@ -616,6 +629,29 @@ fn execute_run(path: &str, json: bool, args: &[String]) -> PortalResult<CommandO
         "engine_name": plan.engine_name,
         "executable": plan.executable,
         "exit_code": exit_code,
+    });
+
+    Ok(CommandOutput { data, human })
+}
+
+fn execute_bump(root: &str) -> PortalResult<CommandOutput> {
+    let root = expand_path(root)?;
+    let result = portal_version::bump(&root)?;
+
+    let human = if result.added {
+        format!("Added {} to {}\n", result.version, result.path.display())
+    } else {
+        format!(
+            "{} is already the latest release in {}\n",
+            result.version,
+            result.path.display()
+        )
+    };
+    let data = json!({
+        "version": result.version,
+        "previous_latest": result.previous_latest,
+        "added": result.added,
+        "path": result.path,
     });
 
     Ok(CommandOutput { data, human })

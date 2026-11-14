@@ -181,7 +181,11 @@ pub fn expand_path(input: &str) -> PortalResult<PathBuf> {
     } else {
         let current =
             std::env::current_dir().map_err(|error| PortalError::io(PathBuf::from("."), error))?;
-        Ok(current.join(expanded))
+        if expanded.as_os_str().is_empty() || expanded == Path::new(".") {
+            Ok(current)
+        } else {
+            Ok(current.join(expanded))
+        }
     }
 }
 
@@ -223,7 +227,7 @@ fn civil_from_days(days: i64) -> (i64, u32, u32) {
     (if month <= 2 { year + 1 } else { year }, month, day)
 }
 
-fn atomic_write(path: &Path, contents: &[u8]) -> PortalResult<()> {
+pub fn atomic_write(path: &Path, contents: &[u8]) -> PortalResult<()> {
     let parent = path.parent().ok_or_else(|| {
         PortalError::InvalidInput(format!("invalid registry path: {}", path.display()))
     })?;

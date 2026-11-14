@@ -45,8 +45,8 @@ Before changing code, read:
 
 ## Implemented
 
-- `core`: paths, registry, version parsing/filtering/sorting, GitHub discovery/download, install/uninstall, templates, project creation, project run, doctor, progress/cancellation.
-- `cli`: `releases`, `install`, `uninstall`, `installed`, `templates`, `create`, `run`, `doctor`, `--version`, `--help`.
+- `core`: paths, registry, version parsing/filtering/sorting, portal version bump, GitHub discovery/download, install/uninstall, templates, project creation, project run, doctor, progress/cancellation.
+- `cli`: `releases`, `install`, `uninstall`, `installed`, `templates`, `create`, `run`, `bump`, `doctor`, `--version`, `--help`.
 - Tests for parsing, compatibility, sorting, registry roundtrip, path validation, template discovery, project creation, archive validation, and checksum parsing.
 - Verified end-to-end against the current published Linux test release: install, replacement install, uninstall, template discovery, project creation, and doctor.
 - Verified `run` starts the engine with the project directory as cwd.

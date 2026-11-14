@@ -18,6 +18,7 @@ magic-portal/
       mod.rs
       error.rs
       paths.rs
+      portal_version.rs
       version.rs
       github.rs
       installer.rs
@@ -48,6 +49,7 @@ src/
     mod.rs
     error.rs
     paths.rs
+    portal_version.rs
     version.rs
     github.rs
     installer.rs
@@ -72,6 +74,7 @@ src/
 | `cli.rs` | Clap commands, JSON envelope, headless execution, confirmations. |
 | `core::error` | Shared error type and JSON error kinds. |
 | `core::paths` | Resolve `~/.magic-bevy`, cache, versions, installed registry. |
+| `core::portal_version` | Portal `portal.toml`/`versions.toml` metadata and version bump. |
 | `core::version` | Parse `versions.toml` and `magic.toml`, filter compatible releases, sort versions. |
 | `core::github` | Fetch manifests, resolve release assets, download files, verify checksums. |
 | `core::installer` | Download, verify, extract zip/tar.gz, run spells, register version, uninstall. |

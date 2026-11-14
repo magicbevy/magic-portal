@@ -6,12 +6,15 @@
 |---|---|
 | `Cargo.toml` | Package manifest and dependencies. |
 | `Cargo.lock` | Lockfile. |
+| `portal.toml` | Current portal version and channel. |
+| `versions.toml` | Portal release list. |
 | `src/main.rs` | Entry point. Dispatches to `cli::run()`. |
 | `src/cli.rs` | Clap commands, JSON envelope, confirmations, headless execution. |
 | `src/theme.rs` | Engine theme copied from Magic Bevy. |
 | `src/core/mod.rs` | Core module exports and test helpers. |
 | `src/core/error.rs` | Shared error type and JSON error kinds. |
 | `src/core/paths.rs` | Magic Bevy paths, registry, version validation, time formatting. |
+| `src/core/portal_version.rs` | Portal manifest/release list and `bump`. |
 | `src/core/version.rs` | Release/manifest parsing, compatibility, sorting. |
 | `src/core/github.rs` | versions.toml, releases, assets, downloads, checksums. |
 | `src/core/installer.rs` | Install/uninstall, zip/tar.gz extraction, spells, atomic commit. |
@@ -41,6 +44,7 @@
 | `src/core/mod.rs` | Core module exports and test helpers. |
 | `src/core/error.rs` | Shared error type. |
 | `src/core/paths.rs` | Resolve `~/.magic-bevy` paths and registry. |
+| `src/core/portal_version.rs` | Portal version manifest, release list, and bump. |
 | `src/core/version.rs` | Parse and filter engine releases. |
 | `src/core/github.rs` | Fetch manifests and release assets. |
 | `src/core/installer.rs` | Download, verify, extract, install, uninstall. |
@@ -131,6 +135,10 @@ windows.ps1
 | `EngineReleaseEntry` | `src/core/version.rs` | One engine release. |
 | `EngineReleasesFile` | `src/core/version.rs` | `versions.toml` root. |
 | `EngineManifest` | `src/core/version.rs` | `magic.toml` metadata. |
+| `PortalManifest` | `src/core/portal_version.rs` | `portal.toml` metadata. |
+| `PortalReleaseEntry` | `src/core/portal_version.rs` | One portal release entry. |
+| `PortalReleasesFile` | `src/core/portal_version.rs` | `versions.toml` root. |
+| `BumpResult` | `src/core/portal_version.rs` | Result of a portal version bump. |
 | `PortalError` | `src/core/error.rs` | Shared error type. |
 | `InstalledVersion` | `src/core/paths.rs` | Installed version record. |
 | `InstalledRegistry` | `src/core/paths.rs` | `installed.toml` root. |

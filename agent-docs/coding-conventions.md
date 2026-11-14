@@ -69,6 +69,8 @@ Rules:
 
 ## Paths
 
+- Portal manifest: `./portal.toml` (`version`, `channel`)
+- Portal releases: `./versions.toml` (`version`, `channel`)
 - Engine root: `~/.magic-bevy/`
 - Versions: `~/.magic-bevy/versions/<version>/`
 - Engine manifest: `~/.magic-bevy/versions/<version>/magic.toml` (a `magic-bevy/magic.toml` layout is also accepted)
@@ -151,6 +153,7 @@ Add unit tests for:
 - Checksum parsing.
 - Template discovery.
 - Project name validation and project creation.
+- Portal version bump (add, equal, downgrade).
 - Asset name resolution.
 
 Do not test against the live network. Use fixtures for `versions.toml` and small archive fixtures.

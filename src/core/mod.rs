@@ -3,6 +3,7 @@ pub mod error;
 pub mod github;
 pub mod installer;
 pub mod paths;
+pub mod portal_version;
 pub mod progress;
 pub mod project;
 pub mod run;

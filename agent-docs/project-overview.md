@@ -254,6 +254,21 @@ The engine manifest is read from `versions/<version>/magic.toml`; a `versions/<v
 - Executable names and archive extensions differ per OS.
 - Path handling must be cross-platform.
 
+## Portal Versions
+
+The portal has its own release metadata:
+
+- `portal.toml` - current portal version and channel.
+- `versions.toml` - list of portal releases with `version` and `channel`.
+
+`magic-portal bump` compares the version in `portal.toml` with the newest version in `versions.toml`:
+
+- newer: prepend a new release entry to `versions.toml`
+- equal: do nothing
+- older: refuse to downgrade
+
+This is the base for future portal auto-update and release management.
+
 ## Asset Contract
 
 The current release publishes OS archives with these names:

@@ -10,6 +10,10 @@ Verified end-to-end against the current published Linux test release: install, r
 
 The release publishes OS archives but no separate source asset; the portal uses the GitHub tag archive as the source and flattens its top-level directory into the version root.
 
+## Portal releases
+
+`portal.toml` contains the current portal version and channel. `versions.toml` contains the portal release list. `magic-portal bump` adds a newer `portal.toml` version to `versions.toml`; it refuses to downgrade.
+
 ## Build
 
 ```bash
@@ -25,6 +29,7 @@ magic-portal installed --json
 magic-portal templates --version 0.1.0 --json
 magic-portal create --engine 0.1.0 --template empty --name my-game --path ~/projects/my-game --yes --json
 magic-portal run --path ~/projects/my-game --json
+magic-portal bump --json
 magic-portal uninstall 0.1.0 --yes --json
 magic-portal doctor --json
 ```
