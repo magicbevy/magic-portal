@@ -1,3 +1,8 @@
+mod cli;
+mod core;
+mod platform;
+mod theme;
+
 fn main() {
-    println!("Hello, world!");
+    std::process::exit(cli::run());
 }
